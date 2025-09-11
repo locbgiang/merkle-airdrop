@@ -7,7 +7,8 @@ import {BagelToken} from '../src/BagelToken.sol';
 contract Deployment is Script {
     function run() external { 
         vm.startBroadcast();
-        new BagelToken();
+        BagelToken token = new BagelToken();
         vm.stopBroadcast();
+        return token;
     }
 }
