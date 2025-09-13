@@ -6,7 +6,8 @@ import {SignatureChecker} from "@openzeppelin/contracts/utils/cryptography/Signa
 import {EIP712} from "@openzeppelin/contracts/utils/cryptography/EIP712.sol";
 
 contract MerkleAirdrop is EIP712 {
-    error MerkleAirdrop__AccountHasClaimed();
+    error MerkleAirdrop__AlreadyClaimed();
+    error MerkelAirdrop__InvalidSignature();
 
     mapping(address => bool) s_hasClaimed;
 
@@ -34,16 +35,33 @@ contract MerkleAirdrop is EIP712 {
     {
         // check if claimed already
         if (s_hasClaimed[account]){
-            revert MerkleAirdrop__AccountHasClaimed();
+            revert MerkleAirdrop__AlreadyClaimed();
         }
 
         // verify signature
+        if (!_isValidSignature()) {
+            revert MerkelAirdrop__InvalidSignature();
+        }
 
         // verify merkle proof
         // mark as claimed
         s_hasClaimed[account] = true;
 
         // transfer the token
+    }
+
+    /**
+     * This function creates a standardized message hash for EIP-712 signature verification
+     * Here is how it works:
+     * The getMessageHash function generates a unique hash that represent a claim request
+     * for a specific account and amount.
+     * This hash is used for cryptographic verification
+     * to make sure only authorized user can claim their drop
+     * @param account 
+     * @param amount 
+     */
+    function getMessageHash(address account, uint256 amount) public {
+        
     }
 
     ///////////////////////////////////////////////////////////////////
