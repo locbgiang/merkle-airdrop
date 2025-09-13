@@ -1,15 +1,15 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.24;
 
-import {Test, console} from 'forge-std/Test.sol';
-import {BagelToken} from '../../src/BagelToken.sol';
+import {Test, console} from "forge-std/Test.sol";
+import {BagelToken} from "../../src/BagelToken.sol";
 import {Deployment} from "../../script/Deployment.s.sol";
 
 contract BagelTokenTest is Test {
     BagelToken token;
     address owner = makeAddr("owner");
     Deployment deployer = new Deployment();
-    
+
     function setUp() public {
         vm.startPrank(owner);
         token = new BagelToken();

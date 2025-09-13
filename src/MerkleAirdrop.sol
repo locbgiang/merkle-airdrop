@@ -11,8 +11,7 @@ contract MerkleAirdrop is EIP712 {
 
     mapping(address => bool) s_hasClaimed;
 
-    constructor () EIP712("Merkle Airdrop", "1.0.0") {
-    }
+    constructor() EIP712("Merkle Airdrop", "1.0.0") {}
 
     /**
      * This function allows a user to claim their airdrop allocation.
@@ -23,18 +22,11 @@ contract MerkleAirdrop is EIP712 {
      * @param r ECDSA signature
      * @param s ECDSA signature
      */
-    function claim (
-        address account,
-        uint256 amount,
-        bytes32[] calldata merkleProof,
-        uint8 v,
-        bytes32 r,
-        bytes32 s
-    )
+    function claim(address account, uint256 amount, bytes32[] calldata merkleProof, uint8 v, bytes32 r, bytes32 s)
         external
     {
         // check if claimed already
-        if (s_hasClaimed[account]){
+        if (s_hasClaimed[account]) {
             revert MerkleAirdrop__AlreadyClaimed();
         }
 
@@ -57,36 +49,27 @@ contract MerkleAirdrop is EIP712 {
      * for a specific account and amount.
      * This hash is used for cryptographic verification
      * to make sure only authorized user can claim their drop
-     * @param account 
-     * @param amount 
+     * @param account
+     * @param amount
      */
-    function getMessageHash(address account, uint256 amount) public {
-        
-    }
-
-    ///////////////////////////////////////////////////////////////////
+    function getMessageHash(address account, uint256 amount) public {} ///////////////////////////////////////////////////////////////////
     // INTERNAL ///////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////
 
     /**
-     * This function verify whether the recovered signer 
+     * This function verify whether the recovered signer
      * is the expected signer/the account to aidrop token for
      */
-    function _isValidSignature(
-        address signer,
-        bytes32 digest,
-        uint8 _v,
-        bytes32 _r,
-        bytes32 _s
-    ) 
+    function _isValidSignature(address signer, bytes32 digest, uint8 _v, bytes32 _r, bytes32 _s)
         internal
         pure
         returns (bool)
     {
         // could also use SignatureChecker.isValidSignatureNow(signer, digest, signature)
         (
-            address actualSigner, 
-            /* ECDSA.RecoverError recoverError */,
+            address actualSigner,
+            /* ECDSA.RecoverError recoverError */
+            ,
             /* bytes32 signatureLength */
         ) = ECDSA.tryRecover(digest, _v, _r, _s);
         return (actualSigner == signer);
