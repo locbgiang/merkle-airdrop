@@ -3,9 +3,17 @@ pragma solidity ^0.8.24;
 
 import {Script, console} from "forge-std/Script.sol";
 
+/**
+ * @title SplitSignature
+ * @author Loc Giang
+ * @notice This Solidity script is designed to split an Ethereum signature into it's tree components (v, r, s) 
+ */
 contract SplitSignature is Script {
     error __SplitSignatureScript__InvalidSignatureLength();
 
+    /**
+     * The script reads a signature from a file and breaks it down into the standard ECDSA signature components
+     */
     function run () external {
         string memory sig = vm.readFile("signature.txt");
         bytes memory sigBytes = vm.parseBytes(sig);
@@ -29,7 +37,7 @@ contract SplitSignature is Script {
 
         assembly {
             r := mload(add(sig, 32))
-            s := mload(add(sig, 32))
+            s := mload(add(sig, 64))
             v := byte(0, mload(add(sig, 96)))
         }
     }
